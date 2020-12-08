@@ -23,4 +23,33 @@ describe('check-env', function() {
       /Missing environment variables ENV_VAR, NEW_VAR/
     );
   });
+
+  it('should throw an error if object is passed is missing title attribute', function() {
+    assert.throws(
+      function() {
+        checkEnv(['ENV_VAR', { cb: function () {} }]);
+      },
+      /Invalid format passed/
+    );
+  });
+
+  it('should throw an error if object is passed is missing cb attribute', function() {
+    assert.throws(
+      function() {
+        checkEnv(['ENV_VAR', { title: 'OTHER_VAR' }]);
+      },
+      /Invalid format passed/
+    );
+  });
+
+  it('should run callbacks for object parameters and throw error for string parameters', function() {
+    value = 0;
+    assert.ok(value === 1);
+    assert.throws(
+      function() {
+        checkEnv(['ENV_VAR', { title: 'OTHER_VAR', cb: function () { value = 1; } }]);
+      },
+      /Missing environment variables ENV_VAR/
+    );
+  });
 });
